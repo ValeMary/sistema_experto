@@ -13,6 +13,8 @@ class MascotaForm(forms.ModelForm):
             'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
         }
 
+        #otra linea de comentario porque estoy haciendo el curso de git
+
     def clean_examen_sangre(self):
         examen = self.cleaned_data.get('examen_sangre')
         if examen:
