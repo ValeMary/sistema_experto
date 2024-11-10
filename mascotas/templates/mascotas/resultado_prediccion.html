@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Resultado de la Predicción para {{ mascota_nombre }}</h1>
+  
+  <h2>Enfermedad Predicha: {{ enfermedad_predicha.nombre }}</h2>
+  <p>Coincidencia de síntomas: {{ conteo_sintomas }} de {{ total_sintomas }}</p>
+
+  <h3>Síntomas seleccionados:</h3>
+  <p>{{ sintomas_texto }}</p>
+
+  <h3>Enfermedades Posibles:</h3>
+  <ul>
+    {% for ep in enfermedades_posibles %}
+      <li>
+        {{ ep.enfermedad.nombre }} - 
+        Coincidencia: {{ ep.conteo }} síntomas ({{ ep.porcentaje|floatformat:2 }}%)
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h3>Prevenciones:</h3>
+  <ul>
+    {% for prevencion in prevenciones %}
+      <li>{{ prevencion.descripcion }}</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Pruebas Diagnósticas Recomendadas:</h3>
+  <ul>
+    {% for prueba in pruebas_diagnosticas %}
+      <li>{{ prueba.nombre }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

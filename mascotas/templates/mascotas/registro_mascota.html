@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <h1 class="mb-4 text-center" style="font-weight: bold; font-style: italic; color: #A0C0E0;">Registrar Mascota</h1>
+            <div class="card" style="background-color: #253446; border: none; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <div class="card-body" style="padding: 1.5rem;">
+                    <form id="mascotaForm" method="post" action="{% url 'mascotas:registro_mascota' %}">
+                        {% csrf_token %}
+                        
+                        {% for field in form %}
+                        <div class="form-group mb-3">
+                            <label for="{{ field.id_for_label }}" style="color: #E0E0E0; font-weight: bold; font-style: italic;">{{ field.label }}:</label>
+                            {% if field.field.widget.input_type == 'textarea' %}
+                                <textarea class="form-control form-control-sm rounded" id="{{ field.id_for_label }}" name="{{ field.name }}" rows="2" required style="background-color: #1E2A3A; border-color: #3A5875; color: #E0E0E0;">{{ field.value|default:'' }}</textarea>
+                            {% else %}
+                                <input type="{{ field.field.widget.input_type }}" class="form-control form-control-sm rounded" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default:'' }}" required style="background-color: #1E2A3A; border-color: #3A5875; color: #E0E0E0;">
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-sm rounded px-4" style="background-color: #3A5875; border-color: #3A5875; color: #E0E0E0;">Registrar Mascota</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('mascotaForm');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        fetch('{% url "mascotas:registro_mascota" %}', {
+            method: 'POST',
+            body: new FormData(form),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Mascota guardada con éxito');
+                window.location.href = '{% url "mascotas:prediccion_enfermedad" mascota_nombre="nombre_placeholder" %}'.replace('nombre_placeholder', encodeURIComponent(data.mascota_nombre));            } else {
+                alert('Error al guardar la mascota: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ocurrió un error al procesar la solicitud');
+        });
+    });
+});
+</script>
+{% endblock %}

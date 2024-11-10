@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Mascotas con el nombre "{{ nombre }}"</h1>
+  <ul>
+    {% for mascota in mascotas %}
+      <li><a href="{% url 'mascotas:detalle_mascota' mascota.nombre %}">{{ mascota.nombre }} (ID: {{ mascota.id }})</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

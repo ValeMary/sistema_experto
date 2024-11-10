@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #D2B48C; /* Fondo café claro para toda la página */
+    }
+    .card {
+        background-color: rgba(139, 69, 19, 0.8); /* Color café medio con transparencia */
+        color: #ffffff; /* Texto en color blanco */
+        font-size: 0.9rem; /* Tamaño de fuente más pequeño */
+        border-radius: 5px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+    .card-header {
+        background-color: rgba(101, 67, 33, 0.9); /* Color café más oscuro para el encabezado */
+        color: #ffffff;
+        padding: 10px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+    .list-group-item {
+        background-color: rgba(139, 69, 19, 0.6);
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+    .list-group-item:hover {
+        background-color: rgba(139, 69, 19, 0.8); /* Efecto hover más oscuro */
+    }
+    a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+    a:hover {
+        color: #FFD700; /* Color dorado al pasar el mouse */
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="mb-0">Seleccionar Mascota</h2>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for mascota in mascotas %}
+                <li class="list-group-item">
+                    <a href="{% url 'mascotas:preparar_detalles_mascota' mascota.id %}">{{ mascota.nombre }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Mascotas{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Lista de Mascotas</h1>
+<a href="{% url 'mascotas:registro_mascota' %}" class="btn btn-primary mb-3">Registrar Nueva Mascota</a>
+<a href="{% url 'mascotas:entrenar_modelo' %}" class="btn btn-primary mb-3">Entrenar Modelo IA</a>
+
+<div class="row">
+    {% for mascota in mascotas %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ mascota.nombre }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ mascota.especie }} - {{ mascota.raza }}</h6>
+                    <p class="card-text">Propietario: {{ mascota.propietario }}</p>
+                    <div class="mt-3">
+                        <a href="{% url 'mascotas:editar_mascota' mascota.id %}" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="{% url 'mascotas:eliminar_mascota' mascota.id %}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar esta mascota?');">Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <p class="alert alert-info">No hay mascotas registradas.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
+</body>
+</html>

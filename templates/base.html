@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}VETS M&A 2019{% endblock %}</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+   
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-style: italic;
+            padding-top: 56px;
+            margin: 0;
+            overflow-x: hidden;
+            background-color: #4A6B8A; /* Pearly dark sky blue */
+            color: white;
+        }
+        .navbar {
+            background-color: #3A5875; /* Slightly darker shade for navbar */
+            border-bottom: 2px solid #2C4560;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: white !important;
+        }
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .navbar-nav .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .navbar-nav .nav-item {
+            border-right: 1px solid #2C4560;
+            padding: 0 10px;
+        }
+        .navbar-nav .nav-item:last-child {
+            border-right: none;
+        }
+        .container {
+            background-color: #3A5875; /* Slightly darker shade for containers */
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #B0C4DE; /* Light steel blue for titles */
+        }
+        p {
+            color: #FFFFFF;
+        }
+        .btn-primary {
+            background-color: #5B7FA3;
+            border-color: #5B7FA3;
+        }
+        .btn-primary:hover {
+            background-color: #4A6B8A;
+            border-color: #4A6B8A;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="" alt=""> Vets M&A 2019
+            </a>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="{% url 'mascotas:entrenar_modelo' %}" class="nav-link btn btn-primary text-white">Entrenar Modelo IA</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lista_usuarios' %}">Usuarios</a>
+                    </li>                   
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'citas:lista_citas' %}">Citas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mascotas:registro_mascota' %}">Mascota</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mascotas:experto' %}">Experto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mascotas:lista_tratamientos' %}">Tratamientos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'LogOutIndex' %}">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+        {% block content %}
+        <!-- El contenido específico de cada página irá aquí -->
+        {% endblock %}
+    </main>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        window.onscroll = function() {
+            var navbar = document.querySelector('.navbar');
+            if (window.pageYOffset > 0) {
+                navbar.style.backgroundColor = ' #4A6B8A;';
+            } else {
+                navbar.style.backgroundColor = ' #4A6B8A;';
+            }
+        };
+    </script>
+
+    {% block extra_js %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% endblock %}
+</body>
+</html>

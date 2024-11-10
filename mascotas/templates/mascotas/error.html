@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Error</h1>
+    <p>{{ error }}</p>
+    <a href="{% url 'detalle_mascota' examen.mascota.id %}" class="btn btn-secondary">Volver a detalles de la mascota</a>
+</div>
+{% endblock %}

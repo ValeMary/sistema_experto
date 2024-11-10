@@ -1,0 +1,84 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div style="background-color: #3A5875; padding: 20px; border-radius: 10px; position: relative; color: white;">
+        <h2 class="mb-4 text-center">Usuarios Registrados</h2>
+        <div id="tableContainer" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-hover" style="color: white;">
+                <thead class="sticky-top" style="background-color: #2C4560;">
+                    <tr>
+                        <th>Username</th>
+                        <th>Contraseña</th>
+                        <th>Fecha de registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.username }}</td>
+                        <td>********</td>
+                        <td>{{ usuario.date_joined|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-sm btn-primary" style="background-color: #5B7FA3; border-color: #5B7FA3;">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a href="{% url 'borrar_usuario' usuario.id %}" class="btn btn-sm btn-danger" style="background-color: #B71C1C; border-color: #B71C1C;">
+                                <i class="fas fa-trash-alt"></i> Borrar
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No hay usuarios registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="scrollArrow" class="scroll-arrow" style="color: white;">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmarBorrado(userId, username) {
+    document.getElementById('usuarioABorrar').textContent = username;
+    document.getElementById('formBorrar').action = `/usuario/borrar/${userId}/`;
+    $('#deleteModal').modal('show');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var tableContainer = document.getElementById('tableContainer');
+    var scrollArrow = document.getElementById('scrollArrow');
+
+    function checkScroll() {
+        if (tableContainer.scrollHeight > tableContainer.clientHeight) {
+            scrollArrow.style.display = 'block';
+        } else {
+            scrollArrow.style.display = 'none';
+        }
+    }
+
+    tableContainer.addEventListener('scroll', function() {
+        if (tableContainer.scrollTop + tableContainer.clientHeight >= tableContainer.scrollHeight - 20) {
+            scrollArrow.style.display = 'none';
+        } else {
+            scrollArrow.style.display = 'block';
+        }
+    });
+
+    scrollArrow.addEventListener('click', function() {
+        tableContainer.scrollTop += 30;
+    });
+
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+});
+</script>
+{% endblock %}

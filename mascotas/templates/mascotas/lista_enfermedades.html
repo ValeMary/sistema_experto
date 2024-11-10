@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Lista de Enfermedades</h1>
+
+{% for enfermedad in enfermedades %}
+    <h2>{{ enfermedad.nombre }}</h2>
+    
+    <h3>Síntomas:</h3>
+    <ul>
+    {% for sintoma in enfermedad.sintomas.all %}
+        <li>{{ sintoma.nombre }}</li>
+    {% endfor %}
+    </ul>
+
+    <h3>Pruebas Diagnósticas:</h3>
+    <ul>
+    {% for prueba in enfermedad.pruebas_diagnosticas.all %}
+        <li>{{ prueba.nombre }}</li>
+    {% endfor %}
+    </ul>
+
+    <h3>Prevenciones:</h3>
+    <ul>
+    {% for prevencion in enfermedad.prevenciones.all %}
+        <li>{{ prevencion.descripcion }}</li>
+    {% endfor %}
+    </ul>
+
+    <h3>Tratamiento Recomendado:</h3>
+    <p>{{ enfermedad.tratamiento_recomendado }}</p>
+
+    <hr>
+{% endfor %}
+{% endblock %}

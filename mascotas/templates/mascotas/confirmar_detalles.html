@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Confirmar Detalles de {{ mascota.nombre }}</h2>
+<h3>Síntomas</h3>
+<ul>
+    {% for sintoma in sintomas %}
+    <li>{{ sintoma.descripcion }}</li>
+    {% endfor %}
+</ul>
+<h3>Exámenes</h3>
+<ul>
+    {% for examen in examenes %}
+    <li>{{ examen.titulo }} ({{ examen.fecha }})</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'detalles_mascota' %}" class="btn btn-primary">Ver Detalles Completos</a>
+{% endblock %}

@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<style>
+    <style>
+        body {
+            background-color: #1E2A3A; /* Dark pearly sky blue background */
+            color: #FFFFFF; /* White text general */
+        }
+        .container {
+            background-color: #253446; /* Slightly lighter pearly sky blue */
+            padding: 20px;
+            border-radius: 20px;
+        }
+        .card {
+            border-radius: 15px;
+            border: 2px solid #15202B; /* Darker blue border */
+            background-color: #253446; /* Same as container */
+        }
+        .card-header {
+            background-color: #15202B; /* Darker blue background */
+            color: #FFFFFF; /* White title */
+            border-bottom: none;
+        }
+        .card-body {
+            border-radius: 15px;
+            color: #FFFFFF; /* White text */
+        }
+        .info-mascota, .examenes, .card-body > .row > div {
+            background-color: #15202B; /* Darker blue background */
+            color: #FFFFFF; /* White text */
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .table {
+            color: #FFFFFF; /* White text for tables */
+        }
+        .table th, .table td {
+            border-color: rgba(255, 255, 255, 0.2); /* Soft borders for tables */
+            background-color: transparent;
+            color: #FFFFFF; /* Ensures white text in cells */
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .list-group-item {
+            background-color: transparent;
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #FFFFFF; /* White text for list items */
+        }
+        h2, h3, h4, .card-title {
+            color: #A0C0E0; /* Light pearly blue for headers */
+        }
+        .btn-outline-light {
+            color: #A0C0E0; /* Light pearly blue for contrast */
+            border-color: #A0C0E0;
+            background-color: rgba(21, 32, 43, 0.7); /* Semi-transparent dark blue background */
+        }
+        .btn-outline-light:hover {
+            background-color: #A0C0E0;
+            color: #15202B; /* Dark blue */
+        }
+        .text-muted {
+            color: rgba(255, 255, 255, 0.7) !important; /* Translucent white for muted text */
+        }
+        input, select, textarea {
+            color: #FFFFFF !important;
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="mb-0">Detalles de {{ mascota.nombre }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-mascota">
+                        <h4 class="card-title">Información de la Mascota</h4>
+                        <table class="table table-sm">
+                            <tr>
+                                <th>Nombre:</th>
+                                <td>{{ mascota.nombre }}</td>
+                            </tr>
+                            <tr>
+                                <th>Especie:</th>
+                                <td>{{ mascota.especie }}</td>
+                            </tr>
+                            <tr>
+                                <th>Raza:</th>
+                                <td>{{ mascota.raza }}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de Nacimiento:</th>
+                                <td>{{ mascota.fecha_nacimiento|date:"d/m/Y" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Propietario:</th>
+                                <td>{{ mascota.propietario }}</td>
+                            </tr>
+                            <tr>
+                                <th>Teléfono:</th>
+                                <td>{{ mascota.telefono }}</td>
+                            </tr>
+                            <tr>
+                                <th>Dirección:</th>
+                                <td>{{ mascota.direccion }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h4 class="card-title">Síntomas</h4>
+                    {% if sintomas %}
+                        <ul class="list-group">
+                        {% for sintoma in sintomas %}
+                            <li class="list-group-item">{{ sintoma.nombre }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No hay síntomas registrados para esta mascota.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <h2>Tratamiento</h2>
+            {% if tratamiento %}
+                <p>{{ tratamiento }}</p>
+            {% else %}
+                <p>No se ha registrado tratamiento.</p>
+            {% endif %}
+        
+            <!-- Botón para editar síntomas y tratamiento -->
+           
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="examenes">
+                        <h4 class="card-title">Exámenes</h4>
+                        {% if examenes %}
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Título</th>
+                                            <th>Fecha</th>
+                                            <th>Archivo</th>
+                                            <th>Acciones</th> <!-- Columna de acciones -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for examen in examenes %}
+                                        <tr>
+                                            <td>{{ examen.titulo }}</td>
+                                            <td>Subido el {{ examen.fecha_subida|date:"d/m/Y" }}</td>
+                                            <td>
+                                                {% if examen.archivo_pdf %}
+                                                    <!-- Enlace al archivo PDF -->
+                                                    <a href="{{ examen.archivo_pdf.url }}" class="btn btn-primary" target="_blank">Ver PDF</a>
+                                                {% else %}
+                                                    <p>No hay archivo PDF disponible.</p>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                 
+                                               
+                                                <form method="POST" action="{% url 'mascotas:analizar_examen' mascota.id %}">
+                                                    {% csrf_token %}
+                                                    {% if examen and examen.archivo_pdf %}
+                                                    <a href="{% url 'mascotas:analizar_examen' mascota.id %}">Analizar Examen (por ID)</a>
+                                                    <a href="{% url 'mascotas:analizar_examen_por_nombre' mascota.nombre %}">Analizar Examen (por nombre)</a>   {% else %}
+                                                        <button class="btn btn-info" disabled>No hay PDF</button>
+                                                    {% endif %}
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No hay exámenes registrados para esta mascota.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+
+<!-- Modal para mostrar resultados -->
+<div class="modal fade" id="resultadosModal" tabindex="-1" aria-labelledby="resultadosModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resultadosModalLabel">Resultados del Análisis</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Aquí se cargará el contenido del análisis -->
+        <div id="contenido-analisis"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.btn-outline-light').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                const url = this.getAttribute('href');
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('contenido-analisis').innerHTML = `
+                            <h2>Contenido del PDF</h2>
+                            ${data.resultados.contenido_texto.map(parrafo => `<p>${parrafo}</p>`).join('')}
+                            <h2>Resumen del Análisis</h2>
+                            <p>Total de palabras: ${data.resultados.total_palabras}</p>
+                            <p>Total de páginas: ${data.resultados.total_paginas}</p>
+                            <h3>Palabras Más Comunes</h3>
+                            <ul>
+                                ${data.resultados.palabras_comunes.map(([palabra, frecuencia]) => `<li>${palabra}: ${frecuencia}</li>`).join('')}
+                            </ul>
+                        `;
+                        const modal = new bootstrap.Modal(document.getElementById('resultadosModal'));
+                        modal.show();
+                    } else {
+                        alert('Error al analizar el PDF: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al procesar la solicitud');
+                });
+            });
+        });
+        
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+{% endblock %}

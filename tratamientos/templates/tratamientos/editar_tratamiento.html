@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Tratamiento</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/all.min.css' %}" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Editar Tratamiento</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre del Tratamiento</label>
+                                {{ form.nombre }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.descripcion.id_for_label }}" class="form-label">Descripción</label>
+                                {{ form.descripcion }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.fecha_inicio.id_for_label }}" class="form-label">Fecha de Inicio</label>
+                                {{ form.fecha_inicio }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.fecha_fin.id_for_label }}" class="form-label">Fecha de Fin (opcional)</label>
+                                {{ form.fecha_fin }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.estado.id_for_label }}" class="form-label">Estado</label>
+                                {{ form.estado }}
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Guardar Cambios
+                                </button>
+                                <a href="{% url 'lista_tratamientos' %}" class="btn btn-secondary">
+                                    <i class="fas fa-times me-2"></i>Cancelar
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

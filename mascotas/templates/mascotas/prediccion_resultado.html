@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Síntomas</h1>
+    {% if mascota_nombre %}
+        <p>Síntomas de la mascota: {{ mascota_nombre }}</p>
+    {% endif %}
+    
+    <form id="sintomas-form" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Síntomas</label>
+            <div id="sintomas-container" style="height: 200px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;">
+                {% for sintoma in sintomas %}
+                    <div class="form-check">
+                        <input class="form-check-input sintoma-checkbox" type="checkbox" value="{{ sintoma.id }}" id="sintoma_{{ sintoma.id }}" name="sintomas" {% if sintoma in sintomas_seleccionados %}checked{% endif %}>
+                        <label class="form-check-label" for="sintoma_{{ sintoma.id }}">
+                            {{ sintoma.nombre }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+         
+        <div class="d-flex align-items-center">
+            <button type="submit" class="btn btn-primary mt-3">Guardar Síntomas</button>
+            <button id="verPrediccion" type="button" class="btn btn-info mt-3 me-2">Diagnóstico</button>
+            <button id="addSintomasTratamientoBtn" type="button" class="btn btn-info mt-3">Añadir: síntoma y tratamiento</button>
+            <button id="cargarExamenBtn" class="btn btn-info mt-3 ml-2" data-mascota-nombre="{{ mascota_nombre }}">
+                Cargar Examen
+            </button>
+        </div>
+        
+    </form>
+
+    <div id="resultado-prediccion" style="display: none;">
+        <!-- El resultado de la predicción se insertará aquí -->
+    </div>
+</div>
+<div style="padding: 20px;">
+        <button onclick="history.back()" style="
+            background-color: #7FB3D5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        ">
+            ← Atrás
+        </button>
+    </div>
+<!-- Modal para mostrar la predicción -->
+<style>
+    .modal-content {
+        background-color: #4A2C0F; /* Tono café oscuro */
+        color: #FFFFFF; /* Letras blancas */
+    }
+    .modal-header {
+        border-bottom: 1px solid #6B4423; /* Borde un poco más claro */
+    }
+    .modal-title {
+        color: #FFD700; /* Color dorado para el título */
+    }
+    .close {
+        color: #FFFFFF;
+        opacity: 0.8;
+    }
+    .close:hover {
+        color: #FFD700;
+        opacity: 1;
+    }
+</style>
+
+<div class="modal fade" id="prediccionModal" tabindex="-1" role="dialog" aria-labelledby="prediccionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="background-color: #253446; color: #E0E0E0; border: none;">
+            <div class="modal-header" style="background-color: #1E2A3A; border-bottom: 1px solid #3A5875;">
+                <h5 class="modal-title" id="prediccionModalLabel" style="color: #A0C0E0;">Posible Enfermedad de la Mascota</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #E0E0E0;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="prediccionModalBody" style="background-color: #253446;">
+                <!-- El resultado de la predicción se insertará aquí -->
+            </div>
+        </div>
+    </div>
+
+    {% if tratamientos %}
+    <div class="mt-4">
+        <h2>Tratamientos</h2>
+        {% for tratamiento in tratamientos %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Tratamiento del {{ tratamiento.fecha_inicio|date:"d/m/Y" }}</h5>
+                <p class="card-text">{{ tratamiento.descripcion|linebreaks }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("DOM fully loaded");
+    
+        const sintomasForm = document.getElementById('sintomas-form');
+        const sintomasContainer = document.getElementById('sintomas-container');
+        const verPrediccionBtn = document.getElementById('verPrediccion');
+        const prediccionModal = new bootstrap.Modal(document.getElementById('prediccionModal'));
+        const prediccionModalBody = document.getElementById('prediccionModalBody');
+        const addSintomasTratamientoBtn = document.getElementById('addSintomasTratamientoBtn');
+        const cargarExamenBtn = document.getElementById('cargarExamenBtn');
+    
+        
+        if (cargarExamenBtn) {
+            cargarExamenBtn.addEventListener('click', function() {
+                const mascotaNombre = this.getAttribute('data-mascota-nombre');
+                const url = "{% url 'mascotas:cargar_examen' mascota_nombre='PLACEHOLDER' %}".replace('PLACEHOLDER', mascotaNombre);
+                
+                // Aquí puedes agregar lógica adicional antes de redirigir si es necesario
+                
+                window.location.href = url;
+            });
+        }
+
+        addSintomasTratamientoBtn.addEventListener('click', function() {
+        window.location.href = '{% url "mascotas:experto" %}';
+        })
+        sintomasForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch('{% url "mascotas:guardar_sintomas" mascota_nombre=mascota_nombre %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Síntomas guardados correctamente');
+                } else {
+                    alert('Error al guardar los síntomas');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Hubo un error al guardar los síntomas. Por favor, intente de nuevo.');
+            });
+        });
+
+        if (verPrediccionBtn) {
+            verPrediccionBtn.addEventListener('click', function() {
+                const sintomasSeleccionados = Array.from(sintomasContainer.querySelectorAll('input[type="checkbox"]:checked'))
+                    .map(checkbox => checkbox.value);
+                
+                if (sintomasSeleccionados.length === 0) {
+                    alert("Por favor, seleccione al menos un síntoma.");
+                    return;
+                }
+    
+                const formData = new FormData();
+                sintomasSeleccionados.forEach(sintoma => formData.append('sintomas', sintoma));
+    
+                fetch('{% url "mascotas:prediccion_enfermedad" mascota_nombre=mascota_nombre %}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.html_resultado) {
+                        prediccionModalBody.innerHTML = data.html_resultado;
+                        prediccionModal.show();
+                    } else {
+                        throw new Error("No se recibió el contenido HTML esperado");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Hubo un error al obtener la predicción. Por favor, intente de nuevo.');
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

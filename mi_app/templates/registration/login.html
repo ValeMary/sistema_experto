@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vets M&A 2019 - Iniciar Sesión</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #4A6B8A; /* Pearly dark sky blue */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700; /* Bold */
+            font-style: italic; /* Italic */
+            color: white; /* White text color */
+        }
+        .login-card {
+            background-color: #3A5875; /* Slightly darker shade for the card */
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+        }
+        .login-image {
+            background-image: url('{% static "images/login.jpeg" %}');
+            background-size: cover;
+            background-position: center;
+            min-height: 300px;
+        }
+        .form-control {
+            border-radius: 0.5rem;
+            background-color: #5B7FA3; /* Lighter shade for inputs */
+            border: none;
+            color: white; /* White text in inputs */
+        }
+        .form-control::placeholder {
+            color: #D7E3F0; /* Light color for placeholder */
+        }
+        .btn-custom {
+            border-radius: 0.5rem;
+            padding: 0.375rem 1rem;
+            font-size: 0.9rem;
+        }
+        .btn-primary {
+            background-color: #2C4560; /* Darker blue for primary button */
+            border-color: #2C4560;
+            color: white; /* White text on button */
+        }
+        .btn-secondary {
+            background-color: #3A5875; /* Same as card background for secondary button */
+            border-color: #3A5875;
+            color: white; /* White text on button */
+        }
+        .card-title {
+            color: #FFFFFF; /* White color for title */
+        }
+        .alert-danger {
+            background-color: #B71C1C; /* Dark red for alerts */
+            color: white; /* White text in alert */
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card login-card">
+                    <div class="row g-0">
+                        <div class="col-md-6 login-image"></div>
+                        <div class="col-md-6">
+                            <div class="card-body p-5">
+                                <h2 class="card-title text-center mb-4">Bienvenido a Vets M&A 2019</h2>
+                                <form id="loginForm" method="post" action="{% url 'Indexlogin' %}">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-primary btn-custom me-2">Entrar</button>
+                                        <a href="{% url 'registro' %}" class="btn btn-secondary btn-custom">Registrarse</a>
+                                    </div>
+                                </form>
+                                {% if messages %}
+                                    <div class="alert alert-danger mt-3">
+                                        {% for message in messages %}
+                                            {{ message }}<br>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '{% url "registro" %}', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    window.location.href = '{% url "dashboard" %}';
+                }  
+
+            xhr.send('username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password) + '&csrfmiddlewaretoken=' + encodeURIComponent(csrfToken));
+        });
+    </script>
+</body>
+</html>

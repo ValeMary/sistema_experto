@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Nuevo Tratamiento</title>
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{% static 'css/all.min.css' %}" rel="stylesheet">
+    <!-- Custom styles -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Crear Nuevo Tratamiento</h2>
+                        <form method="post" action="{% url 'crear_tratamiento' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre del Tratamiento</label>
+                                <input type="text" class="form-control" id="{{ form.nombre.id_for_label }}" name="{{ form.nombre.name }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.descripcion.id_for_label }}" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="{{ form.descripcion.id_for_label }}" name="{{ form.descripcion.name }}" rows="4" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.fecha_inicio.id_for_label }}" class="form-label">Fecha de Inicio</label>
+                                <input type="date" class="form-control" id="{{ form.fecha_inicio.id_for_label }}" name="{{ form.fecha_inicio.name }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.fecha_fin.id_for_label }}" class="form-label">Fecha de Fin (opcional)</label>
+                                <input type="date" class="form-control" id="{{ form.fecha_fin.id_for_label }}" name="{{ form.fecha_fin.name }}">
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-save me-2"></i>Guardar Tratamiento
+                                </button>
+                                <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg">
+                                    <i class="fas fa-times me-2"></i>Cancelar
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

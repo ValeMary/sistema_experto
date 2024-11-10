@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Mascota no encontrada</h1>
+  <p>Lo sentimos, no se encontró ninguna mascota con el nombre "{{ nombre }}".</p>
+  <a href="{% url 'mascotas:lista_mascotas' %}">Lista de Mascotas</a>
+{% endblock %}

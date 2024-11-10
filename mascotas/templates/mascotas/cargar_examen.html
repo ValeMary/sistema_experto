@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %} <div class="container mt-5"> <div class="row justify-content-center"> <div class="col-md-8"> <div class="card shadow-sm"> <div class="card-body"> <h2 class="card-title text-center mb-4">Examen de {{ mascota.nombre }}</h2> <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate> {% csrf_token %} {% for field in form %} <div class="mb-3"> <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label> {% if field.field.widget.input_type == 'file' %} <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" id="{{ field.id_for_label }}" class="form-control form-control-sm rounded" {% if field.field.required %}required{% endif %}> {% else %} <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" id="{{ field.id_for_label }}" class="form-control form-control-sm rounded" value="{{ field.value|default:'' }}" {% if field.field.required %}required{% endif %}> {% endif %} {% if field.help_text %} <small class="form-text text-muted">{{ field.help_text }}</small> {% endif %} {% for error in field.errors %} <div class="invalid-feedback">{{ error }}</div> {% endfor %} </div> {% endfor %} <div class="text-center"> <button type="submit" class="btn btn-primary btn-sm rounded-pill">Cargar Examen</button> </div> </form> </div> </div>
+
+        <div class="card mt-4 shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title">Exámenes Cargados</h3>
+                {% if examenes %}
+                    <div class="list-group">
+                    {% for examen in examenes %}
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">{{ examen.titulo }}</h6>
+                                <small>Subido el {{ examen.fecha_subida|date:"d/m/Y" }}</small>
+                            </div>
+                            <a href="{{ examen.archivo_pdf.url }}" target="_blank" class="btn btn-outline-light btn-sm rounded-pill">Ver PDF</a>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No hay exámenes cargados aún.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div style="padding: 20px;">
+        <button onclick="history.back()" style="
+            background-color: #7FB3D5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        ">
+            ← Atrás
+        </button>
+    </div>
+</div>
+
+</div> {% endblock %} {% block extra_css %}
+<style>
+    <style>
+        body {
+            background-color: #2C3E50; /* Azul oscuro ligeramente más claro para el fondo */
+            color: #E0E0E0; /* Gris claro para el texto general */
+        }
+        .container {
+            background-color: #34495E; /* Azul medio para el contenedor */
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        .card {
+            background-color: rgba(52, 73, 94, 0.8); /* Azul medio semi-transparente */
+            color: #FFFFFF; /* Texto blanco */
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: rgba(44, 62, 80, 0.9); /* Azul más oscuro para el encabezado */
+            border-bottom: none;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #AED6F1; /* Azul claro para los encabezados */
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 20px;
+        }
+        li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #AED6F1; /* Azul claro para los bullets */
+        }
+        .btn-primary {
+            background-color: #3498DB; /* Azul más claro para botones */
+            border-color: #3498DB;
+        }
+        .btn-primary:hover {
+            background-color: #2980B9; /* Azul un poco más oscuro para hover */
+            border-color: #2980B9;
+        }
+        .form-control {
+            background-color: #2C3E50; /* Azul oscuro para inputs */
+            border-color: #3498DB;
+            color: #FFFFFF; /* Texto blanco en inputs */
+        }
+        .form-control::placeholder {
+            color: #BDC3C7; /* Gris claro para placeholder */
+        }
+    </style>
+</style> {% endblock %}
+{% block extra_js %}
+<script> (function () { 'use strict' var forms = document.querySelectorAll('.needs-validation') Array.prototype.slice.call(forms) .forEach(function (form) { form.addEventListener('submit', function (event) { if (!form.checkValidity()) { event.preventDefault() event.stopPropagation() } form.classList.add('was-validated') }, false) }) })() </script> {% endblock %}

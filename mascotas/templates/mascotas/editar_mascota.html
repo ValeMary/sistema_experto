@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar {{ mascota.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4"> <!-- Cambié el tamaño de la columna para hacerla más estrecha -->
+            <div class="card mt-5 shadow-sm">
+                <div class="card-body" style="background-color: #D8BFD8;"> <!-- Color café claro -->
+                    <h2 class="card-title text-center mb-3">Editar {{ mascota.nombre }}</h2>
+                    <form method="post" class="needs-validation" novalidate enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="mb-2"> <!-- Reducido el margen inferior -->
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                <input type="{{ field.field.widget.input_type }}" 
+                                       name="{{ field.name }}" 
+                                       id="{{ field.id_for_label }}" 
+                                       class="form-control form-control-sm rounded"
+                                       value="{{ field.value|default:'' }}"
+                                       {% if field.field.required %}required{% endif %}>
+                                {% if field.help_text %}
+                                    <div class="form-text small">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-sm rounded">Guardar Cambios</button>
+                            <a href="{% url 'mascotas:lista_mascotas' %}" class="btn btn-secondary btn-sm rounded mt-2">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+{% endblock %}

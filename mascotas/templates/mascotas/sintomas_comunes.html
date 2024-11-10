@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Síntomas Comunes entre Enfermedades</h1>
+
+{% for categoria, sintomas in sintomas_comunes.items %}
+    <h2>{{ categoria }}</h2>
+    <ul>
+    {% for sintoma in sintomas %}
+        <li>{{ sintoma }}</li>
+    {% endfor %}
+    </ul>
+{% endfor %}
+{% endblock %}

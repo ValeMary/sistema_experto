@@ -1,0 +1,49 @@
+{
+    "predicciones": [
+      {
+        "sintomas": ["fiebre", "tos"],
+        "enfermedad": "Gripe Canina",
+        "tratamiento": "Reposo, hidratación y medicamentos antivirales según prescripción veterinaria.",
+        "prevenciones": [
+          "Vacunación anual",
+          "Evitar contacto con perros enfermos",
+          "Mantener buena higiene"
+        ],
+        "pruebas_diagnosticas": [
+          "Examen físico",
+          "Prueba rápida de influenza canina",
+          "Hemograma completo"
+        ]
+      },
+      {
+        "sintomas": ["vomito", "diarrea"],
+        "enfermedad": "Gastroenteritis",
+        "tratamiento": "Dieta blanda, hidratación y medicamentos según gravedad.",
+        "prevenciones": [
+          "Evitar cambios bruscos en la dieta",
+          "Mantener agua fresca y limpia",
+          "Evitar que ingiera objetos extraños"
+        ],
+        "pruebas_diagnosticas": [
+          "Examen físico",
+          "Análisis de sangre",
+          "Radiografía abdominal"
+        ]
+      },
+      {
+        "sintomas": ["picazon", "perdida de pelo"],
+        "enfermedad": "Dermatitis Alérgica",
+        "tratamiento": "Antihistamínicos, baños medicados y posible cambio de dieta.",
+        "prevenciones": [
+          "Identificar y evitar alérgenos",
+          "Mantener una buena higiene del pelaje",
+          "Usar productos antipulgas regularmente"
+        ],
+        "pruebas_diagnosticas": [
+          "Examen de piel",
+          "Pruebas de alergia",
+          "Raspado de piel"
+        ]
+      }
+    ]
+  }

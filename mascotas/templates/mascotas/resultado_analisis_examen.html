@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Resultado del Análisis de Examen{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Información del Examen -->
+    <div class="card card-custom mb-4">
+        <div class="card-header card-header-custom">
+            <h2 class="mb-0 text-white">Información del Examen</h2>
+        </div>
+        <div class="card-body card-body-custom">
+            <p><strong>Fecha de Subida:</strong> {{ examen.fecha_subida|default:"Fecha no disponible" }}</p>
+            <p><strong>Nombre del Archivo:</strong> {{ examen.archivo_pdf.name|default:"Nombre no disponible" }}</p>
+        </div>
+    </div>
+
+    <!-- Resumen del Examen -->
+    <div class="card card-custom mb-4">
+        <div class="card-header card-header-custom">
+            <h2 class="mb-0 text-white">Resumen del Examen</h2>
+        </div>
+        <div class="card-body card-body-custom">
+            <pre class="text-wrap text-white">{{ valores_examen }}</pre>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button onclick="history.back()" class="btn btn-custom">
+            ← Atrás
+        </button>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #4A6B8A; /* Pearly dark sky blue */
+        color: #FFFFFF; /* Color de texto blanco */
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        background-color: #253446; /* Slightly lighter pearly sky blue */
+        padding: 20px;
+        border-radius: 20px;
+    }
+    .card-custom {
+        background-color: #00509E; /* Un azul más oscuro para las tarjetas */
+        border: none;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+    .card-header-custom {
+        background-color: #003D66; /* Un azul ligeramente más oscuro para los encabezados */
+        color: #FFFFFF; /* Títulos en blanco intenso */
+        padding: 10px 15px;
+    }
+    .card-body-custom {
+        padding: 15px;
+    }
+    h2 {
+        margin: 0;
+        font-size: 1.2em;
+    }
+    pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        color: #FFFFFF; /* Color de texto blanco en el pre */
+    }
+    .btn-custom {
+        background-color: #003D66; /* Color del botón */
+        color: white;
+    }
+    .btn-custom:hover {
+        background-color: #002C54; /* Color del botón al pasar el ratón */
+    }
+</style>
+{% endblock %}

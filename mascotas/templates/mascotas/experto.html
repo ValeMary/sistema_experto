@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+<style>
+.card-title {
+    color: #FFFFFF; /* White color for title */
+}
+.card-text {
+    color: #FFFFFF; /* White color for title */
+    }
+
+</style>
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Panel de Experto</h1>
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Añadir Síntomas</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="sintoma" class="form-label">Nuevo Síntoma</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="sintoma" name="sintoma" required>
+                                <button type="submit" class="btn btn-primary">Añadir</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="sintomas-list" class="mt-4">
+                        <h6 class="mb-3">Síntomas Añadidos:</h6>
+                        <ul class="list-group">
+                            {% for sintoma in sintomas %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ sintoma.nombre }}
+                                    <a href="{% url 'mascotas:eliminar_sintoma' sintoma.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                                </li>
+                            {% empty %}
+                                <li class="list-group-item text-muted">No hay síntomas añadidos.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">Añadir Tratamiento</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="mascota_id" class="form-label">Seleccione una mascota</label>
+                            <select name="mascota_id" id="mascota_id" class="form-select" required>
+                                <option value="" selected disabled>Seleccione una mascota</option>
+                                {% for mascota in mascotas %}
+                                    <option value="{{ mascota.id }}">{{ mascota.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="enfermedad_id" class="form-label">Seleccione una enfermedad</label>
+                            <select name="enfermedad_id" id="enfermedad_id" class="form-select" required>
+                                <option value="" selected disabled>Seleccione una enfermedad</option>
+                                {% for enfermedad in enfermedades %}
+                                    <option value="{{ enfermedad.id }}">{{ enfermedad.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tratamiento" class="form-label">Descripción del tratamiento</label>
+                            <textarea name="tratamiento" id="tratamiento" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Añadir Tratamiento</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button onclick="history.back()" class="btn btn-secondary btn-lg">
+            <i class="fas fa-arrow-left me-2"></i>Volver
+        </button>
+    </div>
+</div>
+{% endblock %}
